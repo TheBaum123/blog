@@ -11,6 +11,7 @@ const h2 = /^#{2}(?!#).*$/
 const h3 = /^#{3}(?!#).*$/
 const h4 = /^#{4}(?!#).*$/
 const h5 = /^#{5}(?!#).*$/
+const h6 = /^#{6}(?!#).*$/
 
 module.exports = function() {
     fs.mkdir(parsedDir, {recursive: true}, err => {
@@ -105,6 +106,10 @@ function isHeading(text) {
     if(h5.test(text)) {
         text = text.replace("#####", "")
         text = `<h5>${text}</h5>`
+    }
+    if(h6.test(text)) {
+        text = text.replace("######", "")
+        text = `<h6>${text}</h6>`
     }
     return text
 }
