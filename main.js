@@ -6,13 +6,12 @@ const path = require("path")
 require("dotenv").config()
 
 const parsedDir = process.env.PARSEDDIR
+const port = process.env.PORT || 3000
 
 parseMd()
 
 let postsListed = []
 let cleanListedPosts = []
-
-const app = express()
 
 function reloadPosts() {
     fs.readdir(parsedDir, (err, files) => {
@@ -39,6 +38,11 @@ function reloadPosts() {
         cleanListedPosts = temp
     })
 }
+setTimeout(() => {
+    reloadPosts()
+}, 1000);
+
+const app = express()
 
 app.get("/api", (req, res) => {
     reloadPosts()
@@ -57,8 +61,5 @@ app.get("/api", (req, res) => {
 
 app.use(express.static("public"))
 
-app.listen(3000)
+app.listen(port)
 
-setTimeout(() => {
-    reloadPosts()
-}, 1000);
