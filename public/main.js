@@ -3,10 +3,12 @@ const postContainer = document.getElementById("post-container")
 const postListHeading = document.getElementById("post-listing-heading")
 const theBaumsBlogHeading = document.getElementById("the-baums-blog-heading")
 
+const backendApiURL = "https://blog-0i4x.onrender.com/"
+
 let posts = []
 
 const postListRequest = new XMLHttpRequest()
-postListRequest.open("GET", `${window.location}api`)
+postListRequest.open("GET", `${backendApiURL}api`)
 postListRequest.send()
 postListRequest.responseType = "json"
 postListRequest.addEventListener("load", () => {
@@ -42,7 +44,7 @@ function openPost(post) {
     postListHeading.style.display = "none"
     postContainer.style.display = "flex"
     const postContentRequest = new XMLHttpRequest()
-    postContentRequest.open("GET", `${window.location}api/?post=${post}`)
+    postContentRequest.open("GET", `${backendApiURL}api/?post=${post}`)
     postContentRequest.send()
     postContentRequest.responseType = "text"
     postContentRequest.addEventListener("load", () => {
