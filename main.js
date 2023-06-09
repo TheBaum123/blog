@@ -1,75 +1,75 @@
-const express = require("express")
-const parseMd = require("./parsePosts")
-const fs = require("fs")
-const path = require("path")
-const cors = require("cors")
+const postListWrapper = document.getElementById("post-listing")
+const postContainer = document.getElementById("post-container")
+const postListHeading = document.getElementById("post-listing-heading")
+const theBaumsBlogHeading = document.getElementById("the-baums-blog-heading")
 
-require("dotenv").config()
+const backendApiURL = "https://blog-0i4x.onrender.com/"
 
-const parsedDir = process.env.PARSEDDIR || "parsed"
-const port = process.env.PORT || 0
+let posts = []
 
-parseMd()
-
-let postsListed = []
-let cleanListedPosts = []
-
-function reloadPosts() {
-    fs.readdir(parsedDir, (err, files) => {
-        postsListed = files
-        cleanListedPosts = []
-        files.forEach(file => {
-            let cleanName = path.parse(file).name
-            cleanListedPosts.push({
-                "cleanName": cleanName,
-                "fullName": cleanName
-            })
-        })
-        cleanListedPosts.sort((a, b) => {
-            return(b.cleanName.split("-----")[1] - a.cleanName.split("-----")[1])
-        })
-        let temp = []
-        cleanListedPosts.forEach(postObj => {
-            let newCleanName = postObj.cleanName.split("-----")[0]
-            temp.push({
-                "cleanName": newCleanName,
-                "fullName": postObj.fullName
-            })
-        })
-        cleanListedPosts = temp
-    })
-}
-setTimeout(() => {
-    reloadPosts()
-}, 1000);
-
-const app = express()
-
-app.get("/api", cors(), (req, res) => {
-    reloadPosts()
-    if(req.query.post) {
-        if(postsListed.includes(`${req.query.post}.html`)) {
-            fs.readFile(`${parsedDir}/${req.query.post}.html`, "utf8", (err, data) => {
-                if(err) {
-                    res.send(`<h1 style="font-family: "monospace"">error:</h1><p style="font-family: "monospace"">${err}</p>`)
-                } else {
-                    res.send(data)
-                }
-            })
-        } else {
-            res.status(404).send(`<h1 style="font-family: "monospace"">error 404, post not found</h>`)
-        }
+const postListRequest = new XMLHttpRequest()
+postListRequest.open("GET", `${backendApiURL}api`)
+postListRequest.send()
+postListRequest.responseType = "json"
+postListRequest.addEventListener("load", () => {
+    if(postListRequest.status == 200) {
+        posts = postListRequest.response
+        loadPosts()
     } else {
-        res.json(cleanListedPosts).send
+        postListWrapper.innerHTML = `<li>Error ${postListRequest.status}</li>`
     }
 })
 
-app.get("/health", (req, res) => {
-    res.json({healthy: true}).send
-})
+theBaumsBlogHeading.addEventListener("click", loadPosts)
 
-app.use(express.static("public"))
+function loadPosts() {
+    postListWrapper.style.display = "block"
+    postListHeading.style.display = "block"
+    postContainer.style.display = "none"
+    postListWrapper.innerHTML = ""
+    posts.forEach(post => {
+        const newLink = document.createElement("li")
+        newLink.innerHTML = `<button>${post.cleanName}</button>`
+        newLink.id = post.fullName
+        postListWrapper.appendChild(newLink)
+        document.getElementById(post.fullName).addEventListener("click", e => {
+            openPost(post.fullName)
+        })
+    })
+}
 
-let listener = app.listen(port, () => {
-    console.log(`listening on port ${listener.address().port}`)
+
+function openPost(post) {
+    postListWrapper.style.display = "none"
+    postListHeading.style.display = "none"
+    postContainer.style.display = "flex"
+    const postContentRequest = new XMLHttpRequest()
+    postContentRequest.open("GET", `${backendApiURL}api/?post=${post}`)
+    postContentRequest.send()
+    postContentRequest.responseType = "text"
+    postContentRequest.addEventListener("load", () => {
+        if(postContentRequest.status == 200) {
+            postContainer.innerHTML = postContentRequest.response
+        } else {
+            postContainer.innerHTML = `<h3>Error ${postContentRequest.status}</h3>`
+        }
+    })
+}
+
+
+function copy(text) {
+    navigator.clipboard.writeText(text)
+    const message = document.createElement("div")
+    message.innerText = `copy "${text.slice(0, 10)}..." to clipboard`
+    message.classList.add("copy-message")
+    document.body.appendChild(message)
+    setTimeout(() => {
+        document.body.removeChild(message)
+    }, 2500);
+}
+
+document.querySelectorAll("code").forEach(elem => {
+    elem.addEventListener("click", e => {
+        copy(elem.innerText)
+    })
 })
