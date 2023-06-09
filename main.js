@@ -6,7 +6,7 @@ const path = require("path")
 require("dotenv").config()
 
 const parsedDir = process.env.PARSEDDIR
-const port = process.env.PORT || 3000
+const port = process.env.PORT || 0
 
 parseMd()
 
@@ -61,5 +61,6 @@ app.get("/api", (req, res) => {
 
 app.use(express.static("public"))
 
-app.listen(port)
-
+let listener = app.listen(port, () => {
+    console.log(`listening on port ${listener.address().port}`)
+})
