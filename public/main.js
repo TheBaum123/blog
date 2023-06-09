@@ -3,8 +3,6 @@ const postContainer = document.getElementById("post-container")
 const postListHeading = document.getElementById("post-listing-heading")
 const theBaumsBlogHeading = document.getElementById("the-baums-blog-heading")
 
-const backendApiURL = "http://192.168.178.21:3000"
-
 let posts = []
 
 const postListRequest = new XMLHttpRequest()
