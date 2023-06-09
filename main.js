@@ -59,6 +59,10 @@ app.get("/api", (req, res) => {
     }
 })
 
+app.get("/health", (req, res) => {
+    res.json({healthy: true}).send
+})
+
 app.use(express.static("public"))
 
 let listener = app.listen(port, () => {
