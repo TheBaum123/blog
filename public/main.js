@@ -20,22 +20,7 @@ postListRequest.addEventListener("load", () => {
     }
 })
 
-function openPost(post) {
-    const postContentRequest = new XMLHttpRequest()
-    postContentRequest.open("GET", `${window.location}api/?post=${post}`)
-    postContentRequest.send()
-    postContentRequest.responseType = "text"
-    postContentRequest.addEventListener("load", () => {
-        if(postContentRequest.status == 200) {
-            postListWrapper.style.display = "none"
-            postListHeading.style.display = "none"
-            postContainer.style.display = "flex"
-            postContainer.innerHTML = postContentRequest.response
-        } else {
-            postListWrapper.innerHTML = `<li>Error ${postContentRequest.status}</li>`
-        }
-    })
-}
+theBaumsBlogHeading.addEventListener("click", loadPosts)
 
 function loadPosts() {
     postListWrapper.style.display = "block"
@@ -53,6 +38,25 @@ function loadPosts() {
     })
 }
 
+
+function openPost(post) {
+    const postContentRequest = new XMLHttpRequest()
+    postContentRequest.open("GET", `${window.location}api/?post=${post}`)
+    postContentRequest.send()
+    postContentRequest.responseType = "text"
+    postContentRequest.addEventListener("load", () => {
+        if(postContentRequest.status == 200) {
+            postListWrapper.style.display = "none"
+            postListHeading.style.display = "none"
+            postContainer.style.display = "flex"
+            postContainer.innerHTML = postContentRequest.response
+        } else {
+            postListWrapper.innerHTML = `<li>Error ${postContentRequest.status}</li>`
+        }
+    })
+}
+
+
 function copy(text) {
     navigator.clipboard.writeText(text)
     const message = document.createElement("div")
@@ -63,8 +67,6 @@ function copy(text) {
         document.body.removeChild(message)
     }, 2500);
 }
-
-theBaumsBlogHeading.addEventListener("click", loadPosts)
 
 document.querySelectorAll("code").forEach(elem => {
     elem.addEventListener("click", e => {
