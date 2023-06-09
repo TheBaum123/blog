@@ -45,7 +45,7 @@ setTimeout(() => {
 
 const app = express()
 
-app.get("/api", (req, res) => {
+app.get("/api", cors(), (req, res) => {
     reloadPosts()
     if(req.query.post) {
         if(postsListed.includes(`${req.query.post}.html`)) {
@@ -69,9 +69,6 @@ app.get("/health", (req, res) => {
 })
 
 app.use(express.static("public"))
-app.use(cors({
-    origin: "*"
-}))
 
 let listener = app.listen(port, () => {
     console.log(`listening on port ${listener.address().port}`)
