@@ -2,6 +2,7 @@ const express = require("express")
 const parseMd = require("./parsePosts")
 const fs = require("fs")
 const path = require("path")
+const cors = require("cors")
 
 require("dotenv").config()
 
@@ -68,6 +69,9 @@ app.get("/health", (req, res) => {
 })
 
 app.use(express.static("public"))
+app.use(cors({
+    origin: "*"
+}))
 
 let listener = app.listen(port, () => {
     console.log(`listening on port ${listener.address().port}`)
