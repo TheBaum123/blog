@@ -5,7 +5,7 @@ const path = require("path")
 
 require("dotenv").config()
 
-const parsedDir = process.env.PARSEDDIR
+const parsedDir = process.env.PARSEDDIR || "parsed"
 const port = process.env.PORT || 0
 
 parseMd()

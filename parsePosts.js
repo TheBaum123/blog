@@ -6,8 +6,8 @@ require("dotenv").config()
 
 const converter = new showdown.Converter()
 
-const postDir = process.env.POSTDIR
-const parsedDir = process.env.PARSEDDIR
+const postDir = process.env.POSTDIR || "posts"
+const parsedDir = process.env.PARSEDDIR || "parsed"
 
 module.exports = function() {
     fs.rmSync(parsedDir, { recursive: true, force: true }, err => {
