@@ -104,11 +104,17 @@ code {
 }
 
 pre {
+    text-align: left;
     width: 100%;
     background-color: var(--bg_h);
     font-family: monospace;
     padding: 10px 25px 10px 25px;
     border-radius: 5px;
+}
+
+hr {
+    height: 1px;
+    width: 100%;
 }
 
 pre>code {
