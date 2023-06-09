@@ -40,7 +40,7 @@ function reloadPosts() {
     })
 }
 
-app.get("/", (req, res) => {
+app.get("/api", (req, res) => {
     reloadPosts()
     if(postsListed.includes(`${req.query.post}.html`)) {
         fs.readFile(`${parsedDir}/${req.query.post}.html`, "utf8", (err, data) => {
@@ -54,6 +54,8 @@ app.get("/", (req, res) => {
         res.json(cleanListedPosts).send
     }
 })
+
+app.use(express.static("public"))
 
 app.listen(3000)
 
