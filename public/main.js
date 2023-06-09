@@ -40,18 +40,18 @@ function loadPosts() {
 
 
 function openPost(post) {
+    postListWrapper.style.display = "none"
+    postListHeading.style.display = "none"
+    postContainer.style.display = "flex"
     const postContentRequest = new XMLHttpRequest()
     postContentRequest.open("GET", `${window.location}api/?post=${post}`)
     postContentRequest.send()
     postContentRequest.responseType = "text"
     postContentRequest.addEventListener("load", () => {
         if(postContentRequest.status == 200) {
-            postListWrapper.style.display = "none"
-            postListHeading.style.display = "none"
-            postContainer.style.display = "flex"
             postContainer.innerHTML = postContentRequest.response
         } else {
-            postListWrapper.innerHTML = `<li>Error ${postContentRequest.status}</li>`
+            postContainer.innerHTML = `<h3>Error ${postContentRequest.status}</h3>`
         }
     })
 }

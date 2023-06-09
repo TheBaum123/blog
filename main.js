@@ -46,14 +46,18 @@ const app = express()
 
 app.get("/api", (req, res) => {
     reloadPosts()
-    if(postsListed.includes(`${req.query.post}.html`)) {
-        fs.readFile(`${parsedDir}/${req.query.post}.html`, "utf8", (err, data) => {
-            if(err) {
-                res.send(`<h1 style="font-family: "monospace"">error</h1>`)
-            } else {
-                res.send(data)
-            }
-        })
+    if(req.query.post) {
+        if(postsListed.includes(`${req.query.post}.html`)) {
+            fs.readFile(`${parsedDir}/${req.query.post}.html`, "utf8", (err, data) => {
+                if(err) {
+                    res.send(`<h1 style="font-family: "monospace"">error:</h1><p style="font-family: "monospace"">${err}</p>`)
+                } else {
+                    res.send(data)
+                }
+            })
+        } else {
+            res.status(404).send(`<h1 style="font-family: "monospace"">error 404, post not found</h>`)
+        }
     } else {
         res.json(cleanListedPosts).send
     }
