@@ -26,8 +26,8 @@ function loadPosts() {
     postListWrapper.style.display = "block"
     postListHeading.style.display = "block"
     postContainer.style.display = "none"
+    postListWrapper.innerHTML = ""
     posts.forEach(post => {
-        postListWrapper.innerHTML = ""
         const newLink = document.createElement("li")
         newLink.innerHTML = `<button>${post.cleanName}</button>`
         newLink.id = post.fullName
