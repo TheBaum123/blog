@@ -54,6 +54,7 @@ function openPost(post) {
             postContainer.innerHTML = `<h3>Error ${postContentRequest.status}</h3>`
         }
     })
+    addCopyFunc()
 }
 
 
@@ -68,8 +69,10 @@ function copy(text) {
     }, 2500);
 }
 
-document.querySelectorAll("code").forEach(elem => {
-    elem.addEventListener("click", e => {
-        copy(elem.innerText)
+function addCopyFunc() {
+    document.querySelectorAll("code").forEach(elem => {
+        elem.addEventListener("click", e => {
+            copy(elem.innerText)
+        })
     })
-})
+}
