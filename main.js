@@ -50,11 +50,13 @@ function openPost(post) {
     postContentRequest.addEventListener("load", () => {
         if(postContentRequest.status == 200) {
             postContainer.innerHTML = postContentRequest.response
+            setTimeout(() => {
+                addCopyFunc()
+            },1000)
         } else {
             postContainer.innerHTML = `<h3>Error ${postContentRequest.status}</h3>`
         }
     })
-    addCopyFunc()
 }
 
 
